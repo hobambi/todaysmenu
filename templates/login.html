@@ -1,8 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>로그인</title>
+    <script>
+        function save_login() {
+            let id = $('#id').val()
+            let pw = $('#pw').val()
+                $.ajax({
+                type: "POST",
+                url: "/login",
+                data: {id_give: id, pw_give: pw},
+                success: function (response) {
+                    let check = response['loginchecknum']
+                    if(check==0){
+                        alert("일치하는 정보가 없습니다. 다시 확인해주세요");
+                    }else if(check==1){
+                        alert(id+"회원님 반갑습니다")
+                        location.href = "/"
+                    }
+                }
+            });
+
+        }
+    </script>
 </head>
 <body>
 <div class="wrap">
@@ -11,10 +33,10 @@
             <h5>아이디, 비밀번호를 입력해 주세요</h5>
     </div>
 
-    <p>ID: <input type="text" /></p>
-    <p>PW: <input type="text" /></p>
-    <button > 로그인하기 </button>
-
+    <p>ID: <input type="text" id="id"/></p>
+    <p>PW: <input type="password" id="pw"/></p>
+    <button onclick="save_login()"> 로그인하기 </button>
+    <button onclick="location.href='/' "> 홈으로 </button>
 </div>
 
 </body>

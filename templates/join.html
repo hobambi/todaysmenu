@@ -1,14 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script>
+
+        function save_join() {
+            let id = $('#id').val()
+            let pw = $('#pw').val()
+            if(pw==""){
+                alert("비밀번호를 입력하세요")
+            }else{
+                $.ajax({
+                type: "POST",
+                url: "/join",
+                data: {id_give: id, pw_give: pw},
+                success: function (response) {
+                    alert(id + "회원님 반갑습니다.")
+                    location.href = "/login"
+                }
+            });
+            }
+        }
+
+        function id_check() {
+            let id = $('#id').val()
+            if (id == "") {
+                alert("id를 입력해주세요")
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/join/idcheck",
+                    data: {id_give: id},
+                    success: function (response) {
+                        let check = response['checknum']
+                        if (check == 0) {
+                            alert("등록된 id 입니다. 다른 id를 사용해주세요")
+                            document.getElementById("go").disabled = true;
+                        } else if (check == 1) {
+                            alert("id를 사용하실 수 있습니다.")
+                            document.getElementById("go").disabled = false;
+                        }
+
+                    }
+
+                })
+            }
+
+        }
+
+    </script>
 </head>
 <body>
 <h1>내가 아는 맛집 알려줄게</h1>
 <h3>회원가입을 환영합니당</h3>
-<p>아이디 : <input type="text" /> <button>중복확인</button> </p>
-<p>비밀번호 : <input type="text" /> </p>
-<p> <button>가입하기</button></p>
+<p>아이디 : <input type="text" id="id"/> <button onclick="id_check()">중복확인</button>
+</p>
+<p>비밀번호 : <input type="password" id="pw"/>
+</p>
+<p>
+    <button onClick="location.href='/"><a href="javascript:window.history.back();">뒤로가기</a></button>
+    <button onclick="save_join()" id="go" disabled='disabled'>가입하기</button>
+</p>
 </body>
 </html>
